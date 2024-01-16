@@ -9,12 +9,12 @@ type PackageJSONConfig = {
 const isPackageJSONConfig = (value: unknown): value is PackageJSONConfig =>
   typeof value === 'object' &&
   value !== null &&
-  !Array.isArray(value) !== true &&
+  !Array.isArray(value) &&
   Object.hasOwn(value, 'version');
 
 export class VersionCommand implements Command {
   constructor (
-    private readonly filePath: string = './package.json'
+    private readonly filePath: string = '../package.json'
   ) {}
 
   public getName(): string {
@@ -23,7 +23,7 @@ export class VersionCommand implements Command {
 
   private readVersion(): string {
     const jsonContent = readFileSync(resolve(this.filePath), 'utf-8');
-    const importedContent = JSON.parse(jsonContent);
+    const importedContent: unknown = JSON.parse(jsonContent);
     if (!isPackageJSONConfig(importedContent)) {
       throw new Error('Failed to parse json content.');
     }
