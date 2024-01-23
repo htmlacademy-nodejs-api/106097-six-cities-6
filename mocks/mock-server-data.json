@@ -131,6 +131,10 @@
       "adminpassword",
       "helloworld",
       "iddqdq3"
+    ],
+    "flag": [
+      "true",
+      "false"
     ]
   }
 }
