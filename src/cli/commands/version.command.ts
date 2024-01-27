@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { Command } from './command.interface.js';
+import { getErrorMessage } from '../../shared/helpers/common.js';
 
 type PackageJSONConfig = {
   version: string;
@@ -37,9 +38,7 @@ export class VersionCommand implements Command {
     } catch (error: unknown) {
       console.error(`Failed to read version from ${this.filePath}`);
 
-      if (error instanceof Error) {
-        console.error(error.message);
-      }
+      getErrorMessage(error);
     }
   }
 }

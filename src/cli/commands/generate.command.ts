@@ -5,6 +5,7 @@ import { TSVOfferGenerator } from '../../shared/libs/offer-generator/tsv-offer-g
 import { appendFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { dirname } from 'node:path';
+import { getErrorMessage } from '../../shared/helpers/common.js';
 
 export class GenerateCommand implements Command {
   private initialData: MockServerData;
@@ -48,9 +49,7 @@ export class GenerateCommand implements Command {
     } catch (error: unknown) {
       console.error('Can\'t generate data.');
 
-      if (error instanceof Error) {
-        console.error(error.message);
-      }
+      getErrorMessage(error);
     }
   }
 }
