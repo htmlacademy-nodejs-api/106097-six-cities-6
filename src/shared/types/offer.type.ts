@@ -1,6 +1,6 @@
 import { City } from './city.js';
-import { Coordinates } from './coordinates.js';
-import { User } from './user.js';
+import { Coordinates } from './coordinates.type.js';
+import { User } from './user.type.js';
 
 export type Offer = {
   name: string;
