@@ -1,5 +1,4 @@
 import { City } from './city.js';
-import { Coordinates } from './coordinates.type.js';
 import { User } from './user.type.js';
 
 export type Offer = {
@@ -19,5 +18,6 @@ export type Offer = {
   amenities: string[];
   author: User;
   comments: number;
-  coordinates: Coordinates;
+  latitude: number;
+  longitude: number;
 }
