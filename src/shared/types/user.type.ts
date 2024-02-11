@@ -2,6 +2,6 @@ export type User = {
   name: string;
   email: string;
   avatarPath: string;
-  getPassword(): string;
+  getPassword?(): string;
   type: string;
 }
