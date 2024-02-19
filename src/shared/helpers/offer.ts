@@ -22,7 +22,7 @@ export function createOffer(offerData: string): Offer {
     authorAvatar,
     authorPassword,
     authorType,
-    comments,
+    commentCount,
     latitude,
     longitude,
   ] = offerData.replace('\n', '').split('\t');
@@ -50,7 +50,7 @@ export function createOffer(offerData: string): Offer {
     guests: Number.parseInt(guests, 10),
     price: Number.parseInt(price, 10),
     amenities: amenities.split(';'),
-    comments: Number.parseInt(comments, 10),
+    commentCount: Number.parseInt(commentCount, 10),
     author,
     latitude: Number.parseFloat(latitude),
     longitude: Number.parseFloat(longitude),
