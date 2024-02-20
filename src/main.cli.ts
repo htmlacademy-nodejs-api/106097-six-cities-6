@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { ImportCommand } from './cli/commands/import.command.js';
-import { CLIApplication, GenerateCommand, HelpCommand, VersionCommand } from './cli/index.js';
+import 'reflect-metadata';
+import { CLIApplication, GenerateCommand, HelpCommand, VersionCommand, ImportCommand } from './cli/index.js';
 
 function bootstrap() {
   const cliApplication = new CLIApplication();
