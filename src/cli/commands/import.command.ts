@@ -18,7 +18,7 @@ export class ImportCommand implements Command {
     this.onImportedLine = this.onImportedLine.bind(this);
     this.onCompleteImport = this.onCompleteImport.bind(this);
 
-    this.userService = new  DefaultUserService(this.logger, UserModel);
+    this.userService = new DefaultUserService(this.logger, UserModel);
     this.offerService = new DefaultOfferService(this.logger, OfferModel);
     this.databaseClient = new MongoDatabaseClient(this.logger);
     this.logger = new ConsoleLogger();
@@ -30,7 +30,7 @@ export class ImportCommand implements Command {
 
   private async onImportedLine(line: string, resolve: () => void) {
     const offer = createOffer(line);
-    await this.saveOffer(offer)
+    await this.saveOffer(offer);
     resolve();
   }
 

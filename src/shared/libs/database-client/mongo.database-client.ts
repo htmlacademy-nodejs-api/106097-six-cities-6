@@ -54,4 +54,4 @@ export class MongoDatabaseClient implements DatabaseClient {
     this.isConnected = false;
     this.logger.info('Database connection closed.');
   }
- }
+}

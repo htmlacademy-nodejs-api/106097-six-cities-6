@@ -6,7 +6,7 @@ import { OfferEntity } from './offer.entity.js';
 import { Component } from '../../types/component.js';
 import { Logger } from '../../libs/logger/index.js';
 
-injectable()
+@injectable()
 export class DefaultOfferService implements OfferService {
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,

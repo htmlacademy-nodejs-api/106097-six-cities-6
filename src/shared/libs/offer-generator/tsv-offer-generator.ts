@@ -18,7 +18,7 @@ const MAX_COMMENTS = 21;
 const FIRST_WEEK_DAY = 1;
 const LAST_WEEK_DAY = 7;
 
-export class TSVOfferGenerator implements OfferGenerator{
+export class TSVOfferGenerator implements OfferGenerator {
   constructor(private readonly mockData: MockServerData) {}
 
   public generate():string {

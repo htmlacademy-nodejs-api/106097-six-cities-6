@@ -46,6 +46,7 @@ export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
 
   @prop({
     required: true,
+    type: () => [String],
   })
   public photos!: string[];
 
@@ -88,6 +89,7 @@ export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
   @prop({
     required: true,
     default: [],
+    type: () => [String],
   })
   public amenities!: string[];
 
