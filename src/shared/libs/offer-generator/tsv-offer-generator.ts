@@ -18,7 +18,7 @@ const MAX_COMMENTS = 21;
 const FIRST_WEEK_DAY = 1;
 const LAST_WEEK_DAY = 7;
 
-export class TSVOfferGenerator implements OfferGenerator{
+export class TSVOfferGenerator implements OfferGenerator {
   constructor(private readonly mockData: MockServerData) {}
 
   public generate():string {
@@ -39,7 +39,7 @@ export class TSVOfferGenerator implements OfferGenerator{
     const price = generateRandomValue(MIN_PRICE, MAX_PRICE, 0).toString();
     const amenities = getRandomItems(this.mockData.amenities);
     const author = getRandomItem(this.mockData.authors);
-    const comments = generateRandomValue(MIN_COMMENTS, MAX_COMMENTS, 0).toString();
+    const commentCount = generateRandomValue(MIN_COMMENTS, MAX_COMMENTS, 0).toString();
     const coordinates = getRandomItem(this.mockData.points[town]);
     const latitude = coordinates.latitude;
     const longitude = coordinates.longitude;
@@ -60,7 +60,7 @@ export class TSVOfferGenerator implements OfferGenerator{
       price,
       amenities,
       author,
-      comments,
+      commentCount,
       latitude,
       longitude,
     ].join('\t');

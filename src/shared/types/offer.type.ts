@@ -1,5 +1,4 @@
-import { City } from './city.js';
-import { User } from './user.type.js';
+import { City, User } from './index.js';
 
 export type Offer = {
   name: string;
@@ -17,7 +16,7 @@ export type Offer = {
   price: number;
   amenities: string[];
   author: User;
-  comments: number;
+  commentCount: number;
   latitude: number;
   longitude: number;
 }
