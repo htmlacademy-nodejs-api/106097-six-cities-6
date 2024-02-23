@@ -1,6 +1,7 @@
 import { defaultClasses, getModelForClass, prop, modelOptions } from '@typegoose/typegoose';
 import { User } from '../../types/index.js';
 import { createSHA256 } from '../../helpers/hash.js';
+import { MAX_PASSWORD_LENGTH } from '../../../cli/index.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface UserEntity extends defaultClasses.Base {}
@@ -36,7 +37,6 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   @prop({
     required: true,
     minlength: [6, 'Min length for user password is 6'],
-    maxlength: [12, 'Max length for user password is 12'],
     default: '',
   })
   public password!: string;
@@ -46,7 +46,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   })
   public type: string;
 
-  constructor(userData: User) {
+  constructor(userData: User,) {
     super();
 
     this.name = userData.name;
@@ -56,6 +56,9 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   }
 
   public setPassword(password: string, salt: string) {
+    if (password.length > MAX_PASSWORD_LENGTH) {
+      throw new Error(`Max password length is ${MAX_PASSWORD_LENGTH}`);
+    }
     this.password = createSHA256(password, salt);
   }
 

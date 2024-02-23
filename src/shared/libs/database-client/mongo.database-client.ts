@@ -46,7 +46,7 @@ export class MongoDatabaseClient implements DatabaseClient {
   }
 
   public async disconnect(): Promise<void> {
-    if (this.isConnectedToDatabase()) {
+    if (!this.isConnectedToDatabase()) {
       throw new Error('Not connected to the database');
     }
 

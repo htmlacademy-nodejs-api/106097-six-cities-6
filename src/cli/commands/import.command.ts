@@ -18,10 +18,10 @@ export class ImportCommand implements Command {
     this.onImportedLine = this.onImportedLine.bind(this);
     this.onCompleteImport = this.onCompleteImport.bind(this);
 
+    this.logger = new ConsoleLogger();
     this.userService = new DefaultUserService(this.logger, UserModel);
     this.offerService = new DefaultOfferService(this.logger, OfferModel);
     this.databaseClient = new MongoDatabaseClient(this.logger);
-    this.logger = new ConsoleLogger();
   }
 
   public getName(): string {
