@@ -14,3 +14,159 @@ tags:
     description: Действия с предлложениями по аренде.
   - name: comments
     description: Действия с комментариями.
+
+paths:
+  /users/register:
+    post:
+      tags: [ 'users' ]
+      summary: Регистрация пользователя
+      description: Регистрирует нового пользователя.
+
+      requestBody:
+        description: Информация для создания нового пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+        required: true
+
+      responses:
+        '201':
+          description: Пользователь успешно создан.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        '409':
+          description: Пользователь с таким email уже существует.
+
+  /users/login:
+    post:
+      tags: ['users']
+      summary: Авторизация пользователя
+      description: Авторизирует пользователя на основании логина и пароля.
+
+      requestBody:
+        description: Информация для авторизации пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/authUser'
+        required: true
+
+      responses:
+        '200':
+          description: Пользователь успешно авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authToken'
+
+        '401':
+          description: Пользователь не авторизирован. Неверный логин, пароль или пользователь не существует.
+
+    get:
+      tags: ['users']
+      summary: Проверка состояния пользователя
+      description: Возвращает информацию по авторизированному пользователю.
+
+      requestBody:
+        description: Токен пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/authToken'
+        required: true
+
+      responses:
+        '200':
+          description: Пользователь успешно авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        '401':
+          description: Пользователь не авторизован.
+
+    delete:
+      tags: ['users']
+      summary: Выход пользователя из системы
+      description: Производит выход пользователя из системы.
+
+      requestBody:
+        description: Токен пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/authToken'
+        required: true
+
+      responses:
+        '200':
+          description: 'Пользователь вышел из системы.'
+
+        '401':
+          description: 'Неверный токен.'
+
+
+
+components:
+  schemas:
+    createUser:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: info@website.ru
+
+        name:
+          type: string
+          example: Keks
+
+        avatarPath:
+          type: string
+          example: user.jpg
+
+        password:
+          type: string
+          example: 123456
+
+        type:
+          type: string
+          enum:
+            - common
+            - pro
+          example: common
+
+    user:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+        email:
+          type: string
+          example: info@website.ru
+
+    authUser:
+      type: object
+
+      properties:
+        login:
+          type: string
+          example: info@website.ru
+        password:
+          type: string
+          example: 123456
+
+    authToken:
+      type: object
+
+      properties:
+        token:
+          type: string
+          example: 6329c3d6a04ab10
