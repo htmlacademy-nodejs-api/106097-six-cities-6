@@ -1,9 +1,9 @@
 import { inject, injectable } from 'inversify';
 import { OfferService } from './offer-service.interface.js';
 import { DocumentType, types } from '@typegoose/typegoose';
-import { CreateOfferDto } from './index.js';
+import { CreateOfferDto, DEFAULT_OFFER_COUNT, updateOfferDto, DEFAULT_PREMIUM_OFFER_COUNT } from './index.js';
 import { OfferEntity } from './offer.entity.js';
-import { Component } from '../../types/component.js';
+import { Component, City, SortType } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 
 @injectable()
@@ -27,7 +27,42 @@ export class DefaultOfferService implements OfferService {
     .exec();
   }
 
-  public async find(): Promise<DocumentType<OfferEntity>[]> {
-    return this.offerModel.find();
+  public async updateById(offerId: string, dto: updateOfferDto): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel
+      .findByIdAndUpdate(offerId, dto, {new: true})
+      .populate(['author'])
+      .exec();
+  }
+
+  public async find(count?: number): Promise<DocumentType<OfferEntity>[]> {
+    const limit = count ?? DEFAULT_OFFER_COUNT;
+    return this.offerModel
+    .find()
+    .limit(limit)
+    .sort({postDate: SortType.Down})
+    .populate(['author'])
+    .exec();
+  }
+
+  public async incCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel
+      .findByIdAndUpdate(offerId, {'$inc': {
+        commentCount: 1,
+      }})
+      .exec();
+  }
+
+  public async deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel
+      .findByIdAndDelete(offerId)
+      .exec();
+  }
+
+  public async findPremium(city: City): Promise<DocumentType<OfferEntity>[]> {
+    return this.offerModel
+      .find({town: city, premium: true}, {}, {DEFAULT_PREMIUM_OFFER_COUNT})
+      .sort({postDate: SortType.Down})
+      .populate(['author'])
+      .exec();
   }
 }
