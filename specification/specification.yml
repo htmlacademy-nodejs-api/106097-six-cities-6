@@ -1,0 +1,706 @@
+openapi: 3.0.0
+info:
+  title: "API сервер для проекта «Шесть городов»."
+  description: |-
+    * Список ресурсов и маршрутов сервера «Шесть городов».
+  version: "1.0.0"
+  contact:
+    name: Mikalai Stsebunou
+
+tags:
+  - name: users
+    description: Действия с пользователями.
+  - name: offers
+    description: Действия с предлложениями по аренде.
+  - name: comments
+    description: Действия с комментариями.
+
+paths:
+  /users/register:
+    post:
+      tags: [ 'users' ]
+      summary: Регистрация пользователя
+      description: Регистрирует нового пользователя.
+
+      requestBody:
+        description: Информация для создания нового пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+        required: true
+
+      responses:
+        '201':
+          description: Пользователь успешно создан.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        '409':
+          description: Пользователь с таким email уже существует.
+
+  /users/login:
+    post:
+      tags: ['users']
+      summary: Авторизация пользователя
+      description: Авторизирует пользователя на основании логина и пароля.
+
+      requestBody:
+        description: Информация для авторизации пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/authUser'
+        required: true
+
+      responses:
+        '200':
+          description: Пользователь успешно авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authToken'
+
+        '401':
+          description: Пользователь не авторизирован. Неверный логин, пароль или пользователь не существует.
+
+    get:
+      tags: ['users']
+      summary: Проверка состояния пользователя
+      description: Возвращает информацию по авторизированному пользователю.
+
+      parameters:
+        - name: authToken
+          in: header
+          description: Токен пользователя.
+          schema:
+            type: string
+          required: true
+
+      responses:
+        '200':
+          description: Пользователь успешно авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        '401':
+          description: Пользователь не авторизован.
+
+    delete:
+      tags: ['users']
+      summary: Выход пользователя из системы
+      description: Производит выход пользователя из системы.
+
+      parameters:
+        - name: authToken
+          in: header
+          description: Токен пользователя.
+          schema:
+            type: string
+          required: true
+
+      responses:
+        '200':
+          description: 'Пользователь вышел из системы.'
+
+        '401':
+          description: 'Неверный токен.'
+
+  /users/${userId}/favorites:
+    get:
+      tags: ['users']
+      summary: Получение избранных предложений
+      description: Возвращает список избранного.
+
+      parameters:
+        - name: userId
+          in: path
+          description: Идентификатор пользователя.
+          schema:
+            type: string
+          required: true
+
+        - name: authToken
+          in: header
+          description: Токен пользователя.
+          schema:
+            type: string
+          required: true
+
+      responses:
+        '200':
+          description: Список избранных предложений.
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: '#/components/schemas/offerItem'
+
+        '401':
+          description: Пользователь не авторизован.
+
+        '404':
+          description: В избранном предложений нет.
+
+  /users/${userId}/favorites/${offerId}:
+    post:
+      tags: ['users']
+      summary: Добавление предложения в избраннное
+      description: Добавляет предложение в избраннное.
+
+      parameters:
+        - name: userId
+          in: path
+          description: Идентификатор пользователя.
+          schema:
+            type: string
+          required: true
+
+        - name: offerId
+          in: path
+          description: Идентификатор предложения.
+          schema:
+            type: string
+          required: true
+
+        - name: authToken
+          in: header
+          description: Токен пользователя.
+          schema:
+            type: string
+          required: true
+
+      responses:
+        '200':
+          description: Предложение добавлено в избранное.
+
+        '401':
+          description: Пользователь не авторизован.
+
+        '409':
+          description: Предложение уже находится в избранном.
+
+    delete:
+      tags: ['users']
+      summary: Удаление предложения в избраннного
+      description: Удаляет предложение в избраннного.
+
+      parameters:
+        - name: userId
+          in: path
+          description: Идентификатор пользователя.
+          schema:
+            type: string
+          required: true
+
+        - name: offerId
+          in: path
+          description: Идентификатор предложения.
+          schema:
+            type: string
+          required: true
+
+        - name: authToken
+          in: header
+          description: Токен пользователя.
+          schema:
+            type: string
+          required: true
+
+      responses:
+        '200':
+          description: Предложение удалено из избранного.
+
+        '401':
+          description: Пользователь не авторизован.
+
+        '409':
+          description: Предложения не найдено в избранном.
+
+  /offers:
+    get:
+      tags: ['offers']
+      summary: Получение списка предложений
+      description: По умолчанию возвращает до 60 предложений, отсортированных по дате публикации.
+
+      parameters:
+        - name: count
+          in: query
+          description: Количество предложений.
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Список предложений.
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: '#/components/schemas/offerItem'
+
+        '404':
+          description: Предложений нет.
+
+    post:
+      tags: [ 'offers' ]
+      summary: Создание предложения
+      description: Создаёт новое предложение.
+
+      requestBody:
+        description: Информация для создания нового предложения.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/offer'
+        required: true
+
+      parameters:
+        - name: authToken
+          in: header
+          description: Токен пользователя.
+          schema:
+            type: string
+          required: true
+
+      responses:
+        '201':
+          description: Предложение успешно создано.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+
+        '401':
+          description: Пользователь не авторизован.
+
+        '400':
+          description: Предложение не создано.
+
+  /offers/${offerId}:
+    get:
+      tags: ['offers']
+      summary: Получение детальной информации по предложению
+      description: Возвращает информацию по предложению.
+
+      parameters:
+        - name: offerId
+          in: path
+          description: Идентификатор предложения.
+          schema:
+            type: string
+          required: true
+
+      responses:
+        '200':
+          description: Предложение.
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: '#/components/schemas/offer'
+
+        '404':
+          description: Предложение не найдено.
+
+    put:
+      tags: [ 'offers' ]
+      summary: Редактирование предложения
+      description: Редактирует предложение.
+
+      parameters:
+        - name: offerId
+          in: path
+          description: Идентификатор предложения.
+          schema:
+            type: string
+          required: true
+
+        - name: authToken
+          in: header
+          description: Токен пользователя.
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Предложение успешно изменено.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+
+        '401':
+          description: Пользователь не авторизован.
+
+        '403':
+          description: Пользователь не является владельцем предложения.
+
+    delete:
+      tags: [ 'offers' ]
+      summary: Удаление предложения
+      description: Удаляет предложение и комментарии к нему.
+
+      parameters:
+        - name: offerId
+          in: path
+          description: Идентификатор предложения.
+          schema:
+            type: string
+          required: true
+
+        - name: authToken
+          in: header
+          description: Токен пользователя.
+          schema:
+            type: string
+          required: true
+
+      responses:
+        '200':
+          description: Предложение успешно удалено.
+
+        '401':
+          description: Пользователь не авторизован.
+
+        '403':
+          description: Пользователь не является владельцем предложения.
+
+  /offers/${city}/premium:
+    get:
+      tags: ['offers']
+      summary: Получение списка премиальных предложений
+      description: Возвращает до 3 премиальных предложений для выбранного города, отсортированных по дате публикации.
+
+      parameters:
+        - name: city
+          in: path
+          description: Город.
+          schema:
+            type: string
+          required: true
+
+      responses:
+        '200':
+          description: Список премиальных предложений.
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: '#/components/schemas/offerItem'
+
+        '404':
+          description: Предложений нет.
+
+  /comments/${offerId}:
+    get:
+      tags: ['comments']
+      summary: Получение комментариев
+      description: Для выбранного предложения возвращает до 50 комментариев, отсортированных по дате публикации.
+
+      parameters:
+      - name: offerId
+        in: path
+        description: Идентификатор предложения.
+        schema:
+          type: string
+        required: true
+
+      responses:
+        '200':
+          description: Список комментариев.
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: '#/components/schemas/comment'
+
+        '404':
+          description: У предложения комментариев нет.
+
+    post:
+      tags: ['comments']
+      summary: Добавление комментария
+      description: Добавляет комментарий к предложению.
+
+      requestBody:
+        description: Комментарий.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/comment'
+        required: true
+
+      parameters:
+        - name: offerId
+          in: path
+          description: Идентификатор предложения.
+          schema:
+            type: string
+          required: true
+
+        - name: authToken
+          in: header
+          description: Токен пользователя.
+          schema:
+            type: string
+          required: true
+
+      responses:
+        '201':
+          description: Комментарий добавлен.
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: '#/components/schemas/comment'
+
+        '401':
+          description: Пользователь не авторизован.
+
+        '404':
+          description: Ошибка добавления комментария.
+
+components:
+  schemas:
+    createUser:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: info@website.ru
+
+        name:
+          type: string
+          example: Keks
+
+        avatarPath:
+          type: string
+          example: user.jpg
+
+        password:
+          type: string
+          example: 123456
+
+        type:
+          type: string
+          enum:
+            - common
+            - pro
+          example: common
+
+    user:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+        email:
+          type: string
+          example: info@website.ru
+
+    authUser:
+      type: object
+
+      properties:
+        login:
+          type: string
+          example: info@website.ru
+        password:
+          type: string
+          example: 123456
+
+    authToken:
+      type: object
+
+      properties:
+        token:
+          type: string
+          example: 6329c3d6a04ab10
+
+    offer:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+        name:
+          type: string
+          example: Хорошая светлая квартира
+
+        description:
+          type: string
+          example: Двухкомнатная квартира в центре города с отличным видом.
+
+        postDate:
+          type: string
+          format: date-time
+          example: 2024-02-02T12:00:00Z
+
+        town:
+          type: string
+          enum:
+            - Paris
+            - Cologne
+            - Brussels
+            - Amsterdam
+            - Hamburg
+            - Dusseldorf
+          example: Paris
+
+        previewPath:
+          type: string
+          example: preview.jpg
+
+        photos:
+          type: array
+          items:
+            type: string
+          example: [image1.jpg, image2.jpg, image3.jpg, image4.jpg, image5.jpg, image6.jpg]
+
+        premium:
+          type: boolean
+
+        favorite:
+          type: boolean
+
+        rating:
+          type: number
+          example: 3.5
+
+        type:
+          type: string
+          enum:
+            - apartment
+            - house
+            - room
+            - hotel
+          example: apartment
+
+        rooms:
+          type: number
+          example: 3
+
+        guests:
+          type: number
+          example: 3
+
+        price:
+          type: number
+          example: 99100
+
+        amenities:
+          type: array
+          enum:
+            - Breakfast
+            - Air conditioning
+            - Laptop friendly workspace
+            - Baby seat
+            - Washer
+            - Towels
+            - Fridge
+          example: ['Breakfast', 'Towels']
+
+        author:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+        commentCount:
+          type: number
+          example: 3
+
+        latitude:
+          type: number
+          example: 48.85661
+
+        longitude:
+          type: number
+          example: 2.351499
+
+    offerItem:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+        name:
+          type: string
+          example: Хорошая светлая квартира
+
+        price:
+          type: number
+          example: 99100
+
+        type:
+          type: string
+          enum:
+            - apartment
+            - house
+            - room
+            - hotel
+          example: apartment
+
+        favorite:
+          type: boolean
+
+        postDate:
+          type: string
+          format: date-time
+          example: 2024-02-02T12:00:00Z
+
+        town:
+          type: string
+          enum:
+            - Paris
+            - Cologne
+            - Brussels
+            - Amsterdam
+            - Hamburg
+            - Dusseldorf
+          example: Paris
+
+        premium:
+          type: boolean
+
+        previewPath:
+          type: string
+          example: preview.jpg
+
+        rating:
+          type: number
+          example: 3.5
+
+        commentCount:
+          type: number
+          example: 3
+
+    comment:
+      type: object
+
+      properties:
+        text:
+          type: string
+          example: Некоторый комментарий.
+
+        postDate:
+          type: string
+          format: date-time
+          example: 2024-01-10T12:00:00Z
+
+        rating:
+          type: number
+          example: 5
+
+        userId:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
