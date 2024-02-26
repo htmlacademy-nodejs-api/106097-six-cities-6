@@ -22,9 +22,9 @@ export class DefaultOfferService implements OfferService {
 
   public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
-    .findById(offerId)
-    .populate(['author'])
-    .exec();
+      .findById(offerId)
+      .populate(['author'])
+      .exec();
   }
 
   public async updateById(offerId: string, dto: updateOfferDto): Promise<DocumentType<OfferEntity> | null> {
@@ -37,11 +37,11 @@ export class DefaultOfferService implements OfferService {
   public async find(count?: number): Promise<DocumentType<OfferEntity>[]> {
     const limit = count ?? DEFAULT_OFFER_COUNT;
     return this.offerModel
-    .find()
-    .limit(limit)
-    .sort({postDate: SortType.Down})
-    .populate(['author'])
-    .exec();
+      .find()
+      .limit(limit)
+      .sort({postDate: SortType.Down})
+      .populate(['author'])
+      .exec();
   }
 
   public async incCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {

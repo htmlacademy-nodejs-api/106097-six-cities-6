@@ -6,7 +6,8 @@ export interface CommentEntity extends defaultClasses.Base {}
 
 @modelOptions({
   schemaOptions: {
-    collection: 'comments'
+    collection: 'comments',
+    timestamps: true,
   }
 })
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
@@ -42,4 +43,4 @@ export class CommentEntity extends defaultClasses.TimeStamps {
   public offer: Ref<OfferEntity>;
 }
 
-export const commentModel = getModelForClass(CommentEntity);
+export const CommentModel = getModelForClass(CommentEntity);
