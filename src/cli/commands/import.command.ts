@@ -2,8 +2,9 @@ import { createOffer, getMongoUri, getErrorMessage } from '../../shared/helpers/
 import { MongoDatabaseClient, DatabaseClient } from '../../shared/libs/database-client/index.js';
 import { TSVFileReader } from '../../shared/libs/file-reader/tsv-file-reader.js';
 import { ConsoleLogger, Logger } from '../../shared/libs/logger/index.js';
-import { OfferModel, OfferService, DefaultOfferService } from '../../shared/modules/offer/index.js';
-import { UserService, UserModel, DefaultUserService } from '../../shared/modules/user/index.js';
+import { OfferModel, UserModel } from '../../shared/modules/models.js';
+import { OfferService, DefaultOfferService } from '../../shared/modules/offer/index.js';
+import { UserService, DefaultUserService } from '../../shared/modules/user/index.js';
 import { Offer } from '../../shared/types/index.js';
 import { Command, DEFAULT_DB_PORT, DEFAULT_USER_PASSWORD } from '../index.js';
 

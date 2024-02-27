@@ -1,4 +1,4 @@
-import { defaultClasses, getModelForClass, prop, modelOptions } from '@typegoose/typegoose';
+import { defaultClasses, prop, modelOptions } from '@typegoose/typegoose';
 import { User } from '../../types/index.js';
 import { createSHA256 } from '../../helpers/hash.js';
 import { MAX_PASSWORD_LENGTH } from '../../../cli/index.js';
@@ -66,5 +66,3 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
     return this.password;
   }
 }
-
-export const UserModel = getModelForClass(UserEntity);

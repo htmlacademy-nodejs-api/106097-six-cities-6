@@ -1,4 +1,4 @@
-import { Ref, defaultClasses, getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
+import { Ref, defaultClasses, modelOptions, prop } from '@typegoose/typegoose';
 import { UserEntity } from '../user/user.entity.js';
 import { OfferEntity } from '../offer/offer.entity.js';
 
@@ -43,4 +43,3 @@ export class CommentEntity extends defaultClasses.TimeStamps {
   public offer: Ref<OfferEntity>;
 }
 
-export const CommentModel = getModelForClass(CommentEntity);
