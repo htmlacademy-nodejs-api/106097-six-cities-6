@@ -52,7 +52,7 @@ export class DefaultUserService implements UserService {
 
   public async removeFavorite(userId: string, offerId: string): Promise<DocumentType<UserEntity> | null> {
     return this.userModel
-    .findByIdAndUpdate(userId, { $pull: { favorites: offerId } }, { new: true })
-    .exec();
+      .findByIdAndUpdate(userId, { $pull: { favorites: offerId } }, { new: true })
+      .exec();
   }
 }
