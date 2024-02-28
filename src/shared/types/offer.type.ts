@@ -8,7 +8,6 @@ export type Offer = {
   previewPath: string;
   photos: string[];
   premium: boolean;
-  favorite: boolean;
   rating: number;
   type: string;
   rooms: number;
