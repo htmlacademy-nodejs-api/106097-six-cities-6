@@ -1,5 +1,5 @@
 import { UserEntity } from '../user/user.entity.js';
-import { defaultClasses, modelOptions, prop } from '@typegoose/typegoose';
+import { defaultClasses, modelOptions, prop, getModelForClass } from '@typegoose/typegoose';
 import { City, Offer } from '../../types/index.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
@@ -109,3 +109,4 @@ export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
   public longitude!: number;
 }
 
+export const OfferModel = getModelForClass(OfferEntity);

@@ -1,7 +1,9 @@
 import { inject, injectable } from 'inversify';
 import { OfferService } from './offer-service.interface.js';
 import { DocumentType, types } from '@typegoose/typegoose';
-import { CreateOfferDto, DEFAULT_OFFER_COUNT, updateOfferDto, DEFAULT_PREMIUM_OFFER_COUNT } from './index.js';
+import { CreateOfferDto } from './dto/create-offer.dto.js';
+import { DEFAULT_PREMIUM_OFFER_COUNT, DEFAULT_OFFER_COUNT } from './offer.constant.js';
+import { updateOfferDto } from './dto/update-offer.dto.js';
 import { OfferEntity } from './offer.entity.js';
 import { Component, City, SortType } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
@@ -41,6 +43,23 @@ export class DefaultOfferService implements OfferService {
       .limit(limit)
       .sort({postDate: SortType.Down})
       .populate(['author'])
+      .aggregate([
+        {
+          $lookup: {
+            from: 'comments',
+            let: { offerId: '$_id' },
+            pipeline: [
+              { $match: { $expr: { $in: ['$$offerId', '$offers'] } } },
+              { $project: { _id: 1}}
+            ],
+            as: 'comments'
+          },
+        },
+        { $addFields:
+          { id: { $toString: '$_id'}, commentCount: { $size: '$comments'} }
+        },
+        { $unset: 'comments' },
+      ])
       .exec();
   }
 

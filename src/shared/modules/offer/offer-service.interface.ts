@@ -1,5 +1,7 @@
 import { DocumentType } from '@typegoose/typegoose';
-import { CreateOfferDto, OfferEntity, updateOfferDto } from './index.js';
+import { CreateOfferDto } from './dto/create-offer.dto.js';
+import { updateOfferDto } from './dto/update-offer.dto.js';
+import { OfferEntity } from './offer.entity.js';
 import { City } from '../../types/city.js';
 
 export interface OfferService {

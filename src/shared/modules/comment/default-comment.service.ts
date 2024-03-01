@@ -1,7 +1,9 @@
 import { inject, injectable } from 'inversify';
 import { Component } from '../../types/component.js';
 import { types } from '@typegoose/typegoose';
-import { CreateCommentDto, CommentEntity, CommentService } from './index.js';
+import { CommentService } from './comment-service.interface.js';
+import { CreateCommentDto } from './dto/create-comment.dto.js';
+import { CommentEntity } from './comment.entity.js';
 
 @injectable()
 export class DefaultCommentService implements CommentService {

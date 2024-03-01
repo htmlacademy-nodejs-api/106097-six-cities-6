@@ -1,4 +1,5 @@
-import { City, User } from './index.js';
+import { City } from './city.js';
+import { User } from './user.type.js';
 
 export type Offer = {
   name: string;
