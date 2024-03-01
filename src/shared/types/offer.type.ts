@@ -1,4 +1,5 @@
-import { City, User } from './index.js';
+import { City } from './city.js';
+import { User } from './user.type.js';
 
 export type Offer = {
   name: string;
@@ -8,7 +9,6 @@ export type Offer = {
   previewPath: string;
   photos: string[];
   premium: boolean;
-  favorite: boolean;
   rating: number;
   type: string;
   rooms: number;

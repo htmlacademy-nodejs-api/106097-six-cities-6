@@ -1,6 +1,6 @@
-import { defaultClasses, getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
-import { City, Offer } from '../../types/index.js';
 import { UserEntity } from '../user/user.entity.js';
+import { defaultClasses, modelOptions, prop, getModelForClass } from '@typegoose/typegoose';
+import { City, Offer } from '../../types/index.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface OfferEntity extends defaultClasses.Base {}
@@ -57,12 +57,6 @@ export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
 
   @prop({
     required: true,
-    default: false,
-  })
-  public favorite!: boolean;
-
-  @prop({
-    required: true,
   })
   public rating!: number;
 
@@ -95,7 +89,7 @@ export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
 
   @prop({
     required: true,
-    ref: UserEntity,
+    ref: () => UserEntity,
   })
   public author!: UserEntity;
 

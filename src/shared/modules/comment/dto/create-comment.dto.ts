@@ -1,4 +1,4 @@
-export type Comment = {
+export class CreateCommentDto {
   text: string;
   postDate: Date;
   rating: number;
